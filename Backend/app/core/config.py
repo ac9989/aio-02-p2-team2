@@ -1,0 +1,41 @@
+"""환경변수 기반 애플리케이션 설정입니다."""
+
+from functools import lru_cache
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """`.env`와 시스템 환경변수에서 외부 AI 연동 설정을 읽습니다."""
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
+    langsmith_tracing: bool = False
+    langsmith_api_key: str | None = None
+    langsmith_project: str = "planeat-backend"
+    langsmith_endpoint: str | None = None
+    typesafe_jev_enabled: bool = False
+    typesafe_api_key: str | None = None
+    typesafe_model: str = "jev-latest"
+    typesafe_jev_min_confidence: float = 0.8
+    nemo_guardrails_enabled: bool = True
+    nemo_guardrails_config_path: str = "guardrails"
+    tool_hub_enabled: bool = True
+    tool_hub_catalog_path: str | None = None
+    # 기본 추천 경로는 가벼운 내부 CSV다. Render의 작은 인스턴스에서 ONNX 임베딩이
+    # 요청 지연·재시작을 유발하지 않도록 Chroma는 경로를 명시한 환경에서만 활성화한다.
+    chroma_persist_directory: str | None = None
+    chroma_collection_name: str = "recipe_guides"
+    chroma_recipe_collection_name: str = "recipe_catalog"
+    chroma_auto_index_on_startup: bool = False
+    pdf_storage_directory: str = "output/pdf"
+    pdf_public_base_url: str | None = None
+
+
+@lru_cache
+def get_settings() -> Settings:
+    """프로세스 동안 동일한 설정 인스턴스를 재사용합니다."""
+
+    return Settings()

@@ -1,0 +1,14 @@
+{
+  "session_id": "session-001",
+  "message": "다이어트 식단으로 20분 안에 만들고 싶어요.",
+  "attachments": [
+    {
+      "type": "image",
+      "data": "<base64-image-or-url>"
+    },
+    {
+      "type": "image",
+      "data": "<base64-image-or-url>"
+    }
+  ]
+}
